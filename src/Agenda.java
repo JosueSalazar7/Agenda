@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -12,15 +11,22 @@ public class Agenda {
     private JTextField cel;
     private JTextField ema;
 
-    PreparedStatement ps;
+    Statement ps;
+
     public Agenda() {
     buscarButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             Connection con;
+
             try{
                con = getConection();
-
+               ps = con.createStatement();
+               ResultSet rs;
+               rs=ps.executeQuery("select * from INF where cedula="+ced.getText()+";");
+               while (rs.next()){
+                   nom.setText(rs.getString("NOMBRE"));
+               }
             }catch (Exception s){
 
             }
@@ -29,7 +35,7 @@ public class Agenda {
     }
     public static Connection getConection(){
         Connection con = null;
-        String base= "INF";
+        String base= "INGRESODATOS";
         String url = "jdbc:mysql://localhost:3306/" + base;
         String user = "root";
         String password = "Pelota2002";
